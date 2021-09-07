@@ -1,0 +1,84 @@
+{
+    "name": "my-app",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@material-ui/core": "^4.12.3",
+        "@material-ui/icons": "^4.11.2",
+        "@material-ui/lab": "^4.0.0-alpha.60",
+        "@reduxjs/toolkit": "^1.6.1",
+        "@testing-library/jest-dom": "^5.11.4",
+        "@testing-library/react": "^11.1.0",
+        "@testing-library/user-event": "^12.1.10",
+        "@types/firebase": "^3.2.1",
+        "@types/jest": "^26.0.15",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.14.14",
+        "@types/react-dom": "^16.9.8",
+        "@types/react-redux": "^7.1.18",
+        "@types/redux-logger": "^3.0.9",
+        "@types/webpack-env": "^1.16.2",
+        "axios": "^0.21.1",
+        "firebase": "^9.0.1",
+        "material-ui-search-bar": "^1.0.0",
+        "react": "^17.0.2",
+        "react-card-flip": "^1.1.3",
+        "react-dom": "^17.0.2",
+        "react-redux": "^7.2.4",
+        "react-router-dom": "^5.2.1",
+        "react-scripts": "4.0.3",
+        "react-swipeable-views": "^0.14.0",
+        "reactstrap": "^8.10.0",
+        "redux-logger": "^3.0.6",
+        "typescript": "^4.0.3",
+        "web-vitals": "^0.2.4",
+        "workbox-background-sync": "^5.1.3",
+        "workbox-broadcast-update": "^5.1.3",
+        "workbox-cacheable-response": "^5.1.3",
+        "workbox-core": "^5.1.3",
+        "workbox-expiration": "^5.1.3",
+        "workbox-google-analytics": "^5.1.3",
+        "workbox-navigation-preload": "^5.1.3",
+        "workbox-precaching": "^5.1.3",
+        "workbox-range-requests": "^5.1.3",
+        "workbox-routing": "^5.1.3",
+        "workbox-strategies": "^5.1.3",
+        "workbox-streams": "^5.1.3"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "lint": "eslint \"src/**/*.{ts,tsx}\"",
+        "lint:fix": "eslint --fix \"src/**/*.{ts,tsx}\""
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@types/react-router-dom": "^5.1.8",
+        "@typescript-eslint/eslint-plugin": "^4.30.0",
+        "@typescript-eslint/parser": "^4.30.0",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-react": "^7.25.1",
+        "prettier": "^2.3.2"
+    }
+}
