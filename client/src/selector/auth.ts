@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 import { RootState } from '../app/store';
 import { AuthState } from '../slices/userSlice';
 
+//extract states of authentication using selector
+
 export const authSelector: (state: RootState) => AuthState = (state: RootState) => state.auth;
 
 export const userDataSelector = createSelector(authSelector, (auth) => {

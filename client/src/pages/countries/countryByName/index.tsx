@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { alpha, Box, Grid, makeStyles, Theme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import InterfaceCountry from '../../../interface/country';
 import CourseCard from '../../../components/card';
 import SearchBar from 'material-ui-search-bar';
-import { fetchCountriesByName } from '../../../slices/countryNameSlice';
+import { fetchCountriesByName, resetCountryState } from '../../../slices/countryNameSlice';
 import { getAllValidationByName } from '../../../modules/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCountriesByName, selectNameStatus } from '../../../selector/country';
+import { getAllCountriesByName } from '../../../selector/country';
 import { isFireSelector } from '../../../selector/auth';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { useHistory } from 'react-router-dom';
+import ErrorText from '../../../components/error_text';
+import logging from '../../../app/logging';
 
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -33,6 +35,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     marginGird: {
         marginTop: 20
+    },
+    text: {
+        textAlign: 'center',
+        marginTop: 100
     }
 }));
 
@@ -42,9 +48,8 @@ const CountryByNamePage: React.FunctionComponent = () => {
     const [searchCountry, setSearch] = useState('');
     const [alertOpen, setAlertOpen] = useState('info');
     const [error, setError] = useState<string>('');
-
+    const [notFound, setNotFound] = useState(false);
     const countrySelector = useSelector(getAllCountriesByName);
-    const loadStatus = useSelector(selectNameStatus);
     const fireSelector = useSelector(isFireSelector);
     const [snackBarOpen, setSnackBarOpen] = useState<boolean>(false);
 
@@ -71,20 +76,22 @@ const CountryByNamePage: React.FunctionComponent = () => {
             try {
                 if (searchCountry !== '') {
                     await getAllValidationByName(fireSelector, searchCountry, (error, countries) => {
+                        dispatch(resetCountryState());
                         if (error) {
-                            console.log(error);
+                            logging.error(error);
 
                             setTimeout(() => {
                                 setLoading(false);
-                            }, 500);
+                                setNotFound(true);
+                            }, 1000);
                             return error;
                         } else if (countries) {
                             setTimeout(() => {
                                 setLoading(false);
-                            }, 500);
+                                setNotFound(false);
+                            }, 1000);
 
                             dispatch(fetchCountriesByName({ countries: countries } as unknown as InterfaceCountry));
-                            setLoading(false);
                         }
                     });
                 } else {
@@ -118,7 +125,7 @@ const CountryByNamePage: React.FunctionComponent = () => {
                     </Alert>
                 ) : (
                     <Alert onClose={handleCloseSnack} severity="info">
-                        Please proceed to login
+                        Please proceed to login to gain access
                     </Alert>
                 )}
             </Snackbar>
@@ -132,14 +139,15 @@ const CountryByNamePage: React.FunctionComponent = () => {
                 className={classes.search}
                 // onCancelSearch={() => hadleCancel()}
             />
-            {loadStatus === 'idle' ? (
+            <ErrorText error={error} />
+            {!notFound ? (
                 <Grid container className={classes.marginGird} spacing={2}>
                     {countrySelector.map((country, index) => {
                         return <CourseCard key={index} arrayData={country} loading={loading} />;
                     })}
                 </Grid>
             ) : (
-                <Box>Search forcountries</Box>
+                <Box className={classes.text}>Country information not found</Box>
             )}
         </Box>
     );

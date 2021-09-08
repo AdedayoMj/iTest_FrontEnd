@@ -1,10 +1,7 @@
 import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IHeaderProps {}
-
-const PageNotFound: React.FunctionComponent<IHeaderProps> = (props) => {
+const PageNotFound: React.FunctionComponent = () => {
     const headerStyle = {
         width: '100%',
         height: '100%'

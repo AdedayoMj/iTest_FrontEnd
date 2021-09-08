@@ -7,6 +7,7 @@ interface Props extends RouteProps {
     component: any;
 }
 
+//Function to protect path route
 const PrivateRoute: React.FunctionComponent<Props> = (props) => {
     const isFireTokenSelector = useSelector(isFireSelector); // get fire token
     const laoding = useSelector(isLoading);

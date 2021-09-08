@@ -3,7 +3,7 @@ import React from 'react';
 export interface IErrorTextProps {
     error: string | undefined;
 }
-
+//Function to ouput error information
 const ErrorText: React.FunctionComponent<IErrorTextProps> = (props) => {
     const { error } = props;
 

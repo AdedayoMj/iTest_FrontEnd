@@ -1,7 +1,7 @@
 const DEFAULT_NAMESPACE = 'Client';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const info = (message: any, namespace?: string) => {
+const info = (message: unknown, namespace?: string) => {
     if (typeof message === 'string') {
         console.log(`[${getDate()}] [${namespace || DEFAULT_NAMESPACE}] [INFO] ${message}`);
     } else {
@@ -10,7 +10,7 @@ const info = (message: any, namespace?: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const warn = (message: any, namespace?: string) => {
+const warn = (message: unknown, namespace?: string) => {
     if (typeof message === 'string') {
         console.log(`[${getDate()}] [${namespace || DEFAULT_NAMESPACE}] [WARN] ${message}`);
     } else {
@@ -19,7 +19,7 @@ const warn = (message: any, namespace?: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const error = (message: any, namespace?: string) => {
+const error = (message: unknown, namespace?: string) => {
     if (typeof message === 'string') {
         console.log(`[${getDate()}] [${namespace || DEFAULT_NAMESPACE}] [ERROR] ${message}`);
     } else {

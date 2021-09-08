@@ -5,14 +5,20 @@ import { grey } from '@material-ui/core/colors';
 import InterfaceCountry from '../../../interface/country';
 import CourseCard from '../../../components/card';
 import SearchBar from 'material-ui-search-bar';
-import { fetchCountries } from '../../../slices/countrySlice';
-import { getAllValidation } from '../../../modules/auth';
+import { fetchCountries, resetFetchCountries } from '../../../slices/countrySlice';
+
 import { useDispatch, useSelector } from 'react-redux';
+import Select from '@material-ui/core/Select';
 import { getAllCountries } from '../../../selector/country';
 import { isFireSelector } from '../../../selector/auth';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { useHistory } from 'react-router-dom';
+
+import axios from 'axios';
+import config from '../../../app/config';
+import logging from '../../../app/logging';
+import ErrorText from '../../../components/error_text';
 
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,11 +47,13 @@ const AllCountriesPage: React.FunctionComponent = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState('');
-    const [openSearch, setOpenSearch] = useState(false);
+    const [limit, setLimit] = useState(10);
     const [snackBarOpen, setSnackBarOpen] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const dispatch = useDispatch();
-    const countrySelector = useSelector(getAllCountries);
+
+    const countryPreSelect = useSelector(getAllCountries);
+    const countrySelector = search === '' ? countryPreSelect : countryPreSelect.filter((country) => country.name.includes(search));
     const fireSelector = useSelector(isFireSelector);
     const history = useHistory();
 
@@ -55,7 +63,7 @@ const AllCountriesPage: React.FunctionComponent = () => {
             getCountries();
             setTimeout(() => {
                 setLoading(false);
-            }, 500);
+            }, 1000);
         } else {
             handleOpenSnackbar();
         }
@@ -71,28 +79,34 @@ const AllCountriesPage: React.FunctionComponent = () => {
         history.push('/');
     };
 
-    const hadleCancel = () => {
-        setOpenSearch(false);
-    };
     const handleChange = (value: React.SetStateAction<string>) => {
-        if (value === '') {
-            hadleCancel();
-        }
         setSearch(value);
     };
     const getCountries = async () => {
         try {
-            await getAllValidation(fireSelector, (error, countries) => {
-                if (error) {
-                    return error;
-                } else if (countries) {
-                    dispatch(fetchCountries({ countries: countries } as unknown as InterfaceCountry));
-                    setLoading(false);
-                }
+            const response = await axios({
+                method: 'GET',
+                url: `${config.server.url}/countries`,
+                headers: { Authorization: `Bearer ${fireSelector}` }
             });
+            dispatch(resetFetchCountries());
+
+            if (response.status === 200 || response.status === 304) {
+                logging.info('Successfully validated.');
+                const { countries } = response.data;
+                const countryData = countries.splice(0, limit);
+
+                dispatch(fetchCountries({ countries: countryData } as unknown as InterfaceCountry));
+            } else {
+                logging.warn(response);
+                setError('Unable to validate.');
+            }
         } catch (error) {
-            setError(`Unable to retrieve blog`);
+            setError(`Unable to retrieve countries`);
         }
+    };
+    const handleLimitChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setLimit(event.target.value as number);
     };
 
     return (
@@ -107,7 +121,7 @@ const AllCountriesPage: React.FunctionComponent = () => {
                 onClose={handleCloseSnack}
             >
                 <Alert onClose={handleCloseSnack} severity="info">
-                    Please login to proceed
+                    Please login to proceed, to gain access
                 </Alert>
             </Snackbar>
             <SearchBar
@@ -118,9 +132,17 @@ const AllCountriesPage: React.FunctionComponent = () => {
                     maxWidth: 800
                 }}
                 className={classes.search}
-                onCancelSearch={() => hadleCancel()}
             />
-            <Button onClick={handleLoadCountries}>Load All Country</Button>
+            <ErrorText error={error} />
+            <Button onClick={handleLoadCountries}>Load All Country</Button>{' '}
+            <Select native value={limit} onChange={handleLimitChange} label="Age">
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={40}>40</option>
+                <option value={80}>80</option>
+                <option value={130}>130</option>
+                <option value={200}>200</option>
+            </Select>
             <Grid container className={classes.marginGird} spacing={2}>
                 {countrySelector.map((country, index) => {
                     return <CourseCard key={index} arrayData={country} loading={loading} />;

@@ -1,5 +1,7 @@
 import { RootState } from '../app/store';
 
+//extract states of api cpountry infomation using selector
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const selectStatus = (state: RootState) => state.country.status;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

@@ -36,7 +36,7 @@ const CourseCard: React.FunctionComponent<CardMediaProps> = (props) => {
         }
         setSnackBarOpen(false);
     };
-
+    //Return card component for front and back with help handleFlip to  toggle between front and back
     return (
         <Grid item xs={12} sm={4}>
             <Snackbar

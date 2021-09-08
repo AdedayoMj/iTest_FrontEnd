@@ -25,6 +25,7 @@ interface PayLoad {
     fire_token: string;
 }
 
+//dispatch login function to access api using google popup
 export const login = createAsyncThunk<AuthState, PayLoad>('login', async (req, thunkAPI) => {
     try {
         localStorage.setItem(req.fire_token, 'fire_token');
@@ -36,6 +37,7 @@ export const login = createAsyncThunk<AuthState, PayLoad>('login', async (req, t
     }
 });
 
+//logout function
 export const logout = createAsyncThunk('logout', async (_, thunkAPI) => {
     try {
         await signOut(auth)

@@ -1,13 +1,12 @@
 import React from 'react';
-import IPageProps from '../../interface/pages';
-import { Box, Container, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Box, Container, makeStyles, Typography } from '@material-ui/core';
 import CountryByNamePage from './countryByName';
 import AllCountriesPage from './allCountries';
 import Header from '../../components/header';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flex: 1
     },
@@ -25,17 +24,17 @@ function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
     return (
-        <div role="tabpanel" hidden={value !== index} id={`a11y-tabpanel-${index}`} aria-labelledby={`a11y-tab-${index}`} {...other}>
+        <Box role="tabpanel" hidden={value !== index} id={`a11y-tabpanel-${index}`} aria-labelledby={`a11y-tab-${index}`} {...other}>
             {value === index && (
                 <Box p={3}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }
 
-const CountriesPage: React.FunctionComponent<IPageProps> = (props) => {
+const CountriesPage: React.FunctionComponent = () => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 

@@ -62,7 +62,7 @@ const BackCard: React.FunctionComponent<IBackCardProps> = (props) => {
     const { name, population, timezones, region, handleFlipCard, currencies } = props;
     return (
         <Card className={classes.backcard}>
-            <div className={classes.textCard}>
+            <Box className={classes.textCard}>
                 <Typography className={classes.textTitle} variant="body2" color="textSecondary" component="p">
                     {name}
                 </Typography>
@@ -71,8 +71,6 @@ const BackCard: React.FunctionComponent<IBackCardProps> = (props) => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            p: 0.5,
-                            pr: 0,
                             marginTop: 10
                         }}
                     >
@@ -88,8 +86,6 @@ const BackCard: React.FunctionComponent<IBackCardProps> = (props) => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            // p: 0.5,
-                            // pr: 0,
                             marginTop: 10
                         }}
                     >
@@ -106,8 +102,6 @@ const BackCard: React.FunctionComponent<IBackCardProps> = (props) => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            // p: 0.5,
-                            // pr: 0,
                             marginTop: 10
                         }}
                     >
@@ -119,7 +113,7 @@ const BackCard: React.FunctionComponent<IBackCardProps> = (props) => {
                         </Typography>
                     </Box>
                 </Container>
-            </div>
+            </Box>
             <CardContent>
                 <Typography style={{ textAlign: 'center' }} variant="body2" color="textSecondary" component="p">
                     {region}

@@ -15,7 +15,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -23,20 +22,16 @@ import PublicIcon from '@material-ui/icons/Public';
 import StorageIcon from '@material-ui/icons/Storage';
 import INavProps from '../../interface/nav';
 import { useStyles } from './navStyles';
-import { Tooltip } from '@material-ui/core';
+import { Box, Tooltip } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from '../../app/store';
 import { isFireSelector } from '../../selector/auth';
 import CasinoIcon from '@material-ui/icons/Casino';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../slices/userSlice';
 
 export const iconArray = [
-    {
-        title: 'Login',
-        icon: <HomeIcon />,
-        navlink: '/'
-    },
     {
         title: 'Countries',
         icon: <PublicIcon />,
@@ -74,9 +69,9 @@ const NavPage: React.FunctionComponent<INavProps> = (props) => {
     const handleLogout = () => {
         dispatch(logout());
     };
-
+    //return mini variant material ui navigation
     return (
-        <div className={classes.root}>
+        <Box className={classes.root}>
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -123,16 +118,31 @@ const NavPage: React.FunctionComponent<INavProps> = (props) => {
                     })
                 }}
             >
-                <div className={classes.toolbar}>
+                <Box className={classes.toolbar}>
                     <IconButton onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
-                </div>
+                </Box>
                 <Divider />
 
                 <List>
+                    {fireSelector === '' && (
+                        <List>
+                            <ListItem button onClick={() => history.push('/')}>
+                                <Tooltip title="Login">
+                                    <ListItemIcon>
+                                        <VpnKeyIcon />
+                                    </ListItemIcon>
+                                </Tooltip>
+                                <ListItemText primary="Login" />
+                            </ListItem>
+                            <Divider />
+                        </List>
+                    )}
                     <List>
                         {iconArray.map((item, index) => (
                             <ListItem button key={index} onClick={() => history.push(item.navlink)}>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                <Tooltip title={item.title}>
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                </Tooltip>
                                 <ListItemText primary={item.title} />
                             </ListItem>
                         ))}
@@ -140,11 +150,11 @@ const NavPage: React.FunctionComponent<INavProps> = (props) => {
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar} />
+                <Box className={classes.toolbar} />
                 {children}
             </main>
             {/* </Paper> */}
-        </div>
+        </Box>
     );
 };
 

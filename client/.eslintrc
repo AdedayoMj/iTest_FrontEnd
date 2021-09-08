@@ -1,15 +1,9 @@
 {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2021 //Allows for the parsing of modern ECMAScript features
+        "ecmaVersion": 2021
     },
-    "extends": [
-        "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
-        "plugin:prettier/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react-hooks/recommended",
-        "prettier" // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-    ],
+    "extends": ["plugin:react/recommended", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
     "plugins": ["prettier", "react"],
     "rules": {
         "react-hooks/rules-of-hooks": "error",
@@ -26,7 +20,7 @@
     },
     "settings": {
         "react": {
-            "version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+            "version": "detect"
         }
     }
 }

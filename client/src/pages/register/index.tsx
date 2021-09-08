@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import IPageProps from '../../interface/pages';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+
 // import { register } from '../../slices/userSlice';
 
 function Copyright() {
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const RegisterPage: React.FunctionComponent<IPageProps> = (props) => {
+const RegisterPage: React.FunctionComponent = () => {
     const classes = useStyles();
     const history = useHistory();
 

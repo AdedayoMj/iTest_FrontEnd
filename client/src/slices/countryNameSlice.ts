@@ -1,17 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ICountry, ICountryState } from '../interface/country';
 
+//initial state
 const initialState = {
     list: [],
     error: null,
     status: 'idle'
 } as ICountryState;
 
-interface countCountry {
+interface NameCountry {
     countries: ICountry[];
 }
-
-export const fetchCountriesByName = createAsyncThunk<ICountry[], countCountry>('fetchCountriesByName', async (req, thunkAPI) => {
+//asyncthunk dispatch function to fetch countries info from the backend server using query
+export const fetchCountriesByName = createAsyncThunk<ICountry[], NameCountry>('fetchCountriesByName', async (req, thunkAPI) => {
     try {
         const countries = req.countries;
         const data: ICountry[] = countries;
@@ -20,6 +21,8 @@ export const fetchCountriesByName = createAsyncThunk<ICountry[], countCountry>('
         return thunkAPI.rejectWithValue({ error: error });
     }
 });
+
+export const resetCountryState = createAction('resetCountryState');
 
 export const countryNameSlice = createSlice({
     name: 'countries',
@@ -56,6 +59,12 @@ export const countryNameSlice = createSlice({
             // and change `status` back to `idle` again.
             // if (payload) state.error = payload.message;
             state.status = 'idle';
+        });
+        builder.addCase(resetCountryState, (state) => {
+            // We show the error message
+            // and change `status` back to `idle` again.
+            // if (payload) state.error = payload.message;
+            state.list = initialState.list;
         });
     }
 });

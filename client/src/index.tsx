@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Application from './Application';
-import * as firebase from 'firebase/app';
-import config from './app/config';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+
+//initialize reduxt store at root of the aopplication
 
 ReactDOM.render(
     <React.StrictMode>

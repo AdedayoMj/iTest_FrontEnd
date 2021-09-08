@@ -28,7 +28,7 @@ const Application: React.FunctionComponent = () => {
         backgroundColor: theme.palette.type === 'dark' ? '#073642' : 'light'
     };
 
-    // login user Router
+    // switch router to all the path
     return (
         <ThemeProvider theme={theme}>
             <Paper style={paperStyle}>
@@ -41,8 +41,7 @@ const Application: React.FunctionComponent = () => {
                         <Route exact path="/sql" component={SqlQuestionPage} />
                         {/* <PrivateRoute exact path="/countries" component={CountriesPage} />
                         <PrivateRoute exact path="/favourites" component={CountriesPage} /> */}
-
-                        <Route path={'/page-not-found'} component={PageNotFound} />
+                        <Route component={PageNotFound} />
                     </Switch>
                 </NavPage>
             </Paper>
