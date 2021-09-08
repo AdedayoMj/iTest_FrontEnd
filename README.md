@@ -1,7 +1,9 @@
 # iTest_FrontEnd
 Example of modern PWA application using typescript and redux toolkit. 
 In this application you will learn how to create auth using firebase services and creating a resful api connecting to backend node and mongodb.
-Backend design and code is here https://github.com/AdedayoMj/iTest_backend
+Backend design and code is here
+* Server: https://github.com/AdedayoMj/iTest_backend
+* Demo: https://itest-kanon.netlify.app/
 
 
 Login Page            |  Countries Page
