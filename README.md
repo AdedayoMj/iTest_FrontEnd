@@ -20,6 +20,7 @@ npm install
 npm start
 ```
 ## Technologies
+* Material UI
 * PWA
 * React-Router
 * Redux Toolkit
