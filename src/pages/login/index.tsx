@@ -16,15 +16,15 @@ import Container from '@material-ui/core/Container';
 import { Redirect, useHistory } from 'react-router-dom';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import ErrorText from '../../components/error_text';
+// import ErrorText from '../../components/error_text';
 import { useDispatch } from 'react-redux';
 import { login } from '../../slices/userSlice';
 import { useSelector } from '../../app/store';
-import { errorSelector, isFireSelector } from '../../selector/auth';
+import { isFireSelector } from '../../selector/auth';
 import { Authenticate, SignInWithSocialMedia as SocialMediaPopup } from '../../modules/auth';
-import { AuthProvider } from 'firebase/auth';
+import { AuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import logging from '../../app/logging';
-import { provider } from '../../app/firebase';
+import { auth, provider } from '../../app/firebase';
 
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -75,10 +75,12 @@ const LoginPage: React.FunctionComponent = () => {
     const history = useHistory();
     const [authenticating, setAuthenticating] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [snackBarOpen, setSnackBarOpen] = useState<boolean>(false);
     const fireSelector = useSelector(isFireSelector);
 
-    const errorSelect = useSelector(errorSelector);
+    // const errorSelect = useSelector(errorSelector);
     const handleCloseSnack = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -144,9 +146,70 @@ const LoginPage: React.FunctionComponent = () => {
                 setError(error.message);
             });
     };
-    const handleSnackOpen = (event: { preventDefault: unknown }) => {
-        event.preventDefault;
-        setSnackBarOpen(true);
+
+    const signInWithEmailPassword = () => {
+        if (error !== '') setError('');
+
+        setAuthenticating(true);
+        signInWithEmailAndPassword(auth, email, password)
+            .then(async (result) => {
+                logging.info(result);
+                const user = result.user;
+                if (user) {
+                    const uid = user.uid;
+                    const name = user.displayName;
+                    const email = user.email;
+                    const verify = user.emailVerified;
+                    if (verify === true) {
+                        if (name) {
+                            try {
+                                const fire_token = await user.getIdToken();
+
+                                /**if we get a token, auth with the backup */
+
+                                Authenticate(uid, name, email, fire_token, (error, _user) => {
+                                    if (error) {
+                                        setError(error);
+                                        setSnackBarOpen(true);
+                                        setAuthenticating(false);
+                                    } else if (_user) {
+                                        dispatch(login({ user: _user, fire_token: fire_token }));
+                                        history.push('/');
+                                    }
+                                });
+                            } catch (error) {
+                                setError('Invalid token.');
+                                setSnackBarOpen(true);
+                                logging.error(error);
+                                setAuthenticating(false);
+                            }
+                        }
+                        setAuthenticating(false);
+                    } else {
+                        setError('Please verify your email address');
+                        setAuthenticating(false);
+                        setSnackBarOpen(true);
+                    }
+                } else {
+                    setError('Oops!!! Something went wrong please try again');
+                    setAuthenticating(false);
+                    setSnackBarOpen(true);
+                }
+            })
+            .catch((error) => {
+                logging.error(error);
+                setAuthenticating(false);
+                setSnackBarOpen(true);
+                if (error.code === 'auth/invalid-email') {
+                    setError('Invalid email, please try again!');
+                } else if (error.code === 'auth/user-not-found') {
+                    setError('User does not exist, please try again!');
+                } else if (error.code === 'auth/invalid-password') {
+                    setError('Incorrect password, please try again!');
+                } else if (error.code === 'auth/wrong-password') {
+                    setError('Incorrect password, please try again!');
+                }
+            });
     };
 
     if (fireSelector) {
@@ -165,7 +228,7 @@ const LoginPage: React.FunctionComponent = () => {
                 onClose={handleCloseSnack}
             >
                 <Alert onClose={handleCloseSnack} severity="warning">
-                    This service is not available
+                    {error}
                 </Alert>
             </Snackbar>
             <CssBaseline />
@@ -180,13 +243,20 @@ const LoginPage: React.FunctionComponent = () => {
                     Sign In Google
                 </Button>
                 <hr style={{ width: 200, color: 'white' }} />
-                <form className={classes.form} onSubmit={handleSnackOpen}>
+                <form
+                    className={classes.form}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        signInWithEmailPassword();
+                    }}
+                >
                     <TextField
+                        onChange={(event) => setEmail(event.target.value)}
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        error={errorSelect?.message === undefined ? false : true}
+                        error={error ? true : false}
                         id="email"
                         label="Email Address"
                         name="email"
@@ -196,22 +266,23 @@ const LoginPage: React.FunctionComponent = () => {
 
                     <TextField
                         variant="outlined"
+                        onChange={(event) => setPassword(event.target.value)}
                         margin="normal"
                         required
                         fullWidth
-                        error={errorSelect?.message === undefined ? false : true}
+                        error={error ? true : false}
                         name="password"
                         label="Password"
                         type="password"
                         id="password"
                         autoComplete="current-password"
                     />
-                    <div>
+                    {/* <div>
                         <ErrorText error={error} />
-                    </div>
+                    </div> */}
 
                     <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                    <Button type="submit" fullWidth variant="contained" disabled color="primary" className={classes.submit}>
+                    <Button disabled={authenticating} type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         Sign In
                     </Button>
                     <Grid container>

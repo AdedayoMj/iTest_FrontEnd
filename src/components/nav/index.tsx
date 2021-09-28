@@ -68,6 +68,7 @@ const NavPage: React.FunctionComponent<INavProps> = (props) => {
 
     const handleLogout = () => {
         dispatch(logout());
+        window.location.href = '/';
     };
     //return mini variant material ui navigation
     return (
